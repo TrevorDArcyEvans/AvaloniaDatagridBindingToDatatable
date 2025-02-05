@@ -10,7 +10,7 @@ public partial class MainView : UserControl
     InitializeComponent();
     ClickMe.Click += (o, e) =>
     {
-      if (DataContext is MainViewModel)
+      if (DataContext is MainViewModel vm)
       {
         //clear out any existing columns
         while (ExampleDatagrid.Columns.Count > 0)
@@ -19,19 +19,16 @@ public partial class MainView : UserControl
         }
 
         //assign the datatable to the grid
-        ExampleDatagrid.ItemsSource = (DataContext as MainViewModel).YourDT.DefaultView;
+        ExampleDatagrid.ItemsSource = vm.YourDT.DefaultView;
 
         // create the grid columns based on the datatables columns
-        foreach (System.Data.DataColumn x in (DataContext as MainViewModel).YourDT.Columns)
+        foreach (System.Data.DataColumn x in vm.YourDT.Columns)
         {
-          if (x.DataType == typeof(bool))
-          {
-            ExampleDatagrid.Columns.Add(new DataGridCheckBoxColumn {Header = x.ColumnName, Binding = new Avalonia.Data.Binding($"Row.ItemArray[{x.Ordinal}]")});
-          }
-          else
-          {
-            ExampleDatagrid.Columns.Add(new DataGridTextColumn {Header = x.ColumnName, Binding = new Avalonia.Data.Binding($"Row.ItemArray[{x.Ordinal}]")});
-          }
+          DataGridBoundColumn gridCol = x.DataType == typeof(bool) ? new DataGridCheckBoxColumn() : new DataGridTextColumn();
+
+          gridCol.Header = x.ColumnName;
+          gridCol.Binding = new Avalonia.Data.Binding($"Row.ItemArray[{x.Ordinal}]");
+          ExampleDatagrid.Columns.Add(gridCol);
         }
       }
     };

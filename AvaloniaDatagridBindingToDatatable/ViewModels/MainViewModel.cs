@@ -9,12 +9,10 @@ public class MainViewModel : ViewModelBase
         GenerateDatatableColumnsAndRows();
     }
 
-    public System.Data.DataTable YourDT { get; set; }
+    public System.Data.DataTable YourDT { get; set; } = new();
 
     private void GenerateDatatableColumnsAndRows()
     {
-        YourDT = new();
-
         // Here we create a DataTable.
         // ... We add 5 columns, each with a Type.
         YourDT.Columns.Add("Dosage", typeof(int));
@@ -23,11 +21,6 @@ public class MainViewModel : ViewModelBase
         YourDT.Columns.Add("Date", typeof(DateTime));
         YourDT.Columns.Add("Survived", typeof(bool));
 
-        AddRows();
-    }
-
-    public void AddRows()
-    {
         // Here we add rows.
         YourDT.Rows.Add(25, "Drug A", "Disease A", DateTime.Now.AddDays(-1), true);
         YourDT.Rows.Add(50, "Drug Z", "Problem Z", DateTime.Now.AddDays(-2).AddHours(-6), false);
