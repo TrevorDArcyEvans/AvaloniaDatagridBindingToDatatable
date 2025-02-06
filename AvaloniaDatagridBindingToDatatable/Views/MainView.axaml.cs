@@ -12,13 +12,13 @@ public partial class MainView : UserControl
     {
       if (DataContext is MainViewModel vm)
       {
-        //clear out any existing columns
+        // clear out any existing columns
         while (ExampleDatagrid.Columns.Count > 0)
         {
           ExampleDatagrid.Columns.RemoveAt(ExampleDatagrid.Columns.Count - 1);
         }
 
-        //assign the datatable to the grid
+        // assign the datatable to the grid
         ExampleDatagrid.ItemsSource = vm.YourDT.DefaultView;
 
         // create the grid columns based on the datatables columns
@@ -27,7 +27,10 @@ public partial class MainView : UserControl
           DataGridBoundColumn gridCol = x.DataType == typeof(bool) ? new DataGridCheckBoxColumn() : new DataGridTextColumn();
 
           gridCol.Header = x.ColumnName;
+
+          // bind Avalonia DataGridColumn to Microsoft DataColumn via (Microsoft) DataRowView
           gridCol.Binding = new Avalonia.Data.Binding($"Row.ItemArray[{x.Ordinal}]");
+
           ExampleDatagrid.Columns.Add(gridCol);
         }
       }
